@@ -14,11 +14,7 @@
       href="https://vuejs.org/"
       target="_blank"
     >
-      <img
-        src="./assets/image/vue.svg"
-        class="logo vue"
-        alt="Vue logo"
-      />
+      <SvgIcon name="vue"></SvgIcon>
     </a>
   </div>
   <HelloWorld msg="Vite + Vue" />
@@ -38,3 +34,7 @@
   filter: drop-shadow(0 0 2em #42b883aa);
 }
 </style>
+
+<script lang="ts" setup name="App">
+import SvgIcon from './components/SvgIcon.vue'
+</script>

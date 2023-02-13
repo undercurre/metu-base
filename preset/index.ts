@@ -2,11 +2,17 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { createStyleImportPlugin } from 'vite-plugin-style-import'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { createHtmlPlugin } from 'vite-plugin-html'
+import path from 'path'
+import pkg from '../package.json'
 
 export default [
   vue({
     reactivityTransform: true,
   }),
+  VueSetupExtend(),
   AutoImport({
     // 要转换的文件后缀
     include: [
@@ -121,5 +127,55 @@ export default [
     resolves: [
       /* ... */
     ],
+  }),
+  createSvgIconsPlugin({
+    // 指定需要缓存的图标文件夹
+    iconDirs: [path.resolve(process.cwd(), 'src/assets/image')],
+    // 指定symbolId格式
+    symbolId: 'icon-[dir]-[name]',
+
+    /**
+     * 自定义插入位置
+     * @default: body-last
+     */
+    inject: 'body-last',
+
+    /**
+     * custom dom id
+     * @default: __svg__icons__dom__
+     */
+    customDomId: '__svg__icons__dom__',
+  }),
+  createHtmlPlugin({
+    minify: true,
+    // /**
+    //  * 在这里写entry后，你将不需要在`index.html`内添加 script 标签，原有标签需要删除
+    //  * @default src/main.ts
+    //  */
+    // entry: 'src/main.ts',
+    // /**
+    //  * 如果你想将 `index.html`存放在指定文件夹，可以修改它，否则不需要配置
+    //  * @default index.html
+    //  */
+    // template: 'public/index.html',
+
+    /**
+     * 需要注入 index.html ejs 模版的数据
+     */
+    inject: {
+      data: {
+        title: pkg.name,
+        injectScript: `<script src="./inject.js"></script>`,
+      },
+      tags: [
+        {
+          injectTo: 'body-prepend',
+          tag: 'div',
+          attrs: {
+            id: 'tag',
+          },
+        },
+      ],
+    },
   }),
 ]
