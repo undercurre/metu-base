@@ -7,6 +7,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import path from 'path'
 import pkg from '../package.json'
+import viteCompression from 'vite-plugin-compression'
 
 export default [
   vue({
@@ -178,4 +179,5 @@ export default [
       ],
     },
   }),
+  viteCompression(),
 ]
